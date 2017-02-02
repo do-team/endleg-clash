@@ -1,11 +1,11 @@
-'use strict';
-
 console.log('Loading function');
 
-exports.handler = (event, context, callback) => {
-    //console.log('Received event:', JSON.stringify(event, null, 2));
-    console.log(event);
-    console.log(event.kinesis);
-    callback(null, event);  // Echo back the first key value
-    //callback('Something went wrong');
+exports.handler = function(event, context) {
+    console.log(JSON.stringify(event, null, 2));
+    event.Records.forEach(function(record) {
+        // Kinesis data is base64 encoded so decode here
+        payload = new Buffer(record.kinesis.data, 'base64').toString('ascii');
+        console.log('Decoded payload:', payload);
+    });
+    context.succeed();
 };
