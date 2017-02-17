@@ -1,3 +1,9 @@
+var AWS = require("aws-sdk");
+
+exports.handler = function(event, context) {
+    console.log(event);
+};
+
 /*
 console.log('Loading function');
 
@@ -86,6 +92,8 @@ db score update key array.1.user {
 
 */
 
+
+/*
 //Set up the choices with what they can beat
 //This is a hash table of objects you can referecne by name
 var choices  =  {rock : {name: "Rock", defeats: ["scissors","lizard"]},
@@ -137,7 +145,7 @@ if(computerChoice == userChoice){
             break;
         }
     }*/
-
+/*
     //Improved check, inspired by Mke Spa Guy
     var victory = userChoice.defeats.indexOf(computerChoice) > -1;
 
@@ -148,3 +156,5 @@ if(computerChoice == userChoice){
         alert("Defeat, " + computerChoice + " wins!");
     }
 }
+
+*/
