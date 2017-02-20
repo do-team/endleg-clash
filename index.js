@@ -8,8 +8,6 @@ exports.handler = function(event, context) {
     var incoming = JSON.parse(event.Records[0].Sns.Message);
     console.log('Player one: ', incoming[0].user);
     console.log('Player two: ', incoming[1].user);
-
-
 };
 
 /*
