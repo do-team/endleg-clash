@@ -5,8 +5,9 @@ exports.handler = function(event, context) {
     console.log('Event Records:', event.Records);
     console.log('Event Records SNS:', event.Records[0].Sns);
     console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
-    console.log('Player one: ', event.Records[0].Sns.Message[0].user);
-    console.log('Player two: ', event.Records[0].Sns.Message[0]);
+    var incoming = JSON.parse(event.Records[0].Sns.Message);
+    console.log('Player one: ', incoming[0].user);
+    console.log('Player two: ', incoming[1].user);
 
 
 };
