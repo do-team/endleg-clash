@@ -1,7 +1,10 @@
 var AWS = require("aws-sdk");
 
 exports.handler = function(event, context) {
-    console.log(event.text);
+    console.log('Pure event:', event);
+    console.log('Event Records:', event.Records);
+    console.log('Event Records SNS:', event.Records[0].Sns);
+    console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
 };
 
 /*
