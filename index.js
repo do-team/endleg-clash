@@ -26,8 +26,8 @@ exports.handler = function(event, context) {
 
     for (battle = 1; battle < 5; battle++) {
         var card = 'card' + battle;
-        if(incoming[0].card+battle == incoming[1].card){
-            console.log("It's a tie on round ", battle);
+        if(incoming[0].card == incoming[1].card){
+            console.log("It's a tie on round: ", battle);
             p1DrawScore++;
             p2DrawScore++;
         } else {
@@ -36,11 +36,11 @@ exports.handler = function(event, context) {
 
             //Display result
             if(victory) {
-                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0].card+battle, " beats ", incoming[1].card+battle ,")." );
+                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0].card, " beats ", incoming[1].card ,")." );
                 p1WinScore++;
                 p2LoseScore++;
             }else{
-                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1].card+battle, " beats ", incoming[0].card+battle ,")." );
+                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1].card, " beats ", incoming[0].card ,")." );
                 p1LoseScore++;
                 p2WinScore++;
             }
