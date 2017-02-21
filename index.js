@@ -25,21 +25,21 @@ exports.handler = function(event, context) {
     var p2LoseScore = 0;
 
     for (battle = 1; battle < 5; battle++) {
-        if(incoming[0].card1 == incoming[1].card1){
+        if(incoming[0].card+battle == incoming[1].card1){
             console.log("It's a tie on round ", battle);
             p1DrawScore++;
             p2DrawScore++;
         } else {
-        var p1Card = combinations[incoming[0].card1];
-        var victory = p1Card.defeats.indexOf(incoming[1].card1) > -1;
+        var leadCard = combinations[incoming[0].card+battle];
+        var victory = leadCard.defeats.indexOf(incoming[1].card+battle) > -1;
 
             //Display result
             if(victory) {
-                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0].card1, " beats ", incoming[1].card1 ,")." );
+                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0].card+battle, " beats ", incoming[1].card+battle ,")." );
                 p1WinScore++;
                 p2LoseScore++;
             }else{
-                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1].card1, " beats ", incoming[0].card1 ,")." );
+                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1].card+battle, " beats ", incoming[0].card+battle ,")." );
                 p1LoseScore++;
                 p2WinScore++;
             }
