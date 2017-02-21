@@ -6,6 +6,12 @@ exports.handler = function(event, context) {
     //console.log('Event Records SNS:', event.Records[0].Sns);
     //console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
+
+    // REMAP incoming = { player1: { cards: [ incoming_old[0].card1, ... incoming_old[0].card5 ], user: incoming_old[0].user, ...}, player2: { ... } }
+
+
+    // THEN BELLOW THIS - incoming.player1.cards[battle]
+
     console.log('Player one: ', incoming[0].user, 'VS Player two: ', incoming[1].user);
     console.log(incoming[0].card1);
     console.log(incoming[1].card1);
