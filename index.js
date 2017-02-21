@@ -7,8 +7,8 @@ exports.handler = function(event, context) {
     //console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
     console.log('Player one: ', incoming[0].user, 'VS Player two: ', incoming[1].user);
-    console.log(incoming[0].card1);
-    console.log(incoming[1].card1);
+    //console.log(incoming[0].card1);
+    //console.log(incoming[1].card1);
 
     var combinations = {rock : {name: "rock", defeats: ["scissors","lizard"]},
                      paper: {name: "paper", defeats: ["rock", "spock"]},
@@ -25,7 +25,9 @@ exports.handler = function(event, context) {
     var p2LoseScore = 0;
 
     for (battle = 1; battle < 6; battle++) {
+
         var card = 'card' + battle;
+        console.log(incoming[0].card, incoming[1].card);
         if(incoming[0].card === incoming[1].card){
             console.log("It's a tie on round: ", battle);
             p1DrawScore++;
