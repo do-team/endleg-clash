@@ -1,82 +1,69 @@
 var AWS = require("aws-sdk");
 
 exports.handler = function(event, context) {
-    console.log('Pure event:', event);
-    console.log('Event Records:', event.Records);
-    console.log('Event Records SNS:', event.Records[0].Sns);
-    console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
+    //console.log('Pure event:', event);
+    //console.log('Event Records:', event.Records);
+    //console.log('Event Records SNS:', event.Records[0].Sns);
+    //console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
-    console.log('Player one: ', incoming[0].user);
-    console.log('Player two: ', incoming[1].user);
+    console.log('Player one: ', incoming[0].user, 'VS Player two: ', incoming[1].user);
+
+    var combinations = {rock : {name: "rock", defeats: ["scissors","lizard"]},
+                     paper: {name: "paper", defeats: ["rock", "spock"]},
+                     scissors: {name: "scissors", defeats: ["paper", "lizard"]},
+                     lizard: {name: "lizard", defeats:["paper","spock"]},
+                     spock: {name: "spock", defeats:["scissors","rock"]}
+                    };
+
+    var p1WinScore = 0;
+    var p2WinScore = 0;
+    var p1DrawScore = 0;
+    var p2DrawScore = 0;
+    var p1LoseScore = 0;
+    var p2LoseScore = 0;
+
+    for (battle = 1, battle < 5, battle++) {
+        if(incoming[0].card[battle] == incoming[1].card[battle]){
+            console.log("It's a tie on round ", battle);
+            p1DrawScore++;
+            p2DrawScore++;
+        } else {
+        var p1Card = combinations[incoming[0].card[battle]];
+        var victory = p1Card.defeats.indexOf(incoming[1].card[battle]) > -1;
+
+            //Display result
+            if(victory) {
+                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0].card[battle], " beats ", incoming[1].card[battle] ,")." );
+                p1WinScore++;
+                p2LoseScore++;
+            }else{
+                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1].card[battle], " beats ", incoming[0].card[battle] ,")." );
+                p1LoseScore++;
+                p2WinScore++;
+            }
+        }
+    }
 };
+
 
 /*
-console.log('Loading function');
+    //Improved check, inspired by Mke Spa Guy
+    var victory = userChoice.defeats.indexOf(computerChoice) > -1;
 
-exports.handler = function(event, context) {
-    console.log(JSON.stringify(event, null, 2));
-    event.Records.forEach(function(record) {
-        // Kinesis data is base64 encoded so decode here BLABLABLA
-        payload = new Buffer(record.kinesis.data, 'base64').toString('ascii');
-        console.log('Decoded payload:', payload);
-    });
-    context.succeed();
-};
-
-
-incoming event = [ array ]
-// read array.0 object
-// read array.1 object
-
-for i loop 1 to 5 {
-
-switch array.0.card.i rock
-    switch array.1.card.i rock
-        score.0 = 0
-        score.1 = 0
-    switch array.1.card.i paper
-        score.0 = 0
-        score.1 = 1
-    switch array.1.card.i scissors
-        score.0 = 1
-        score.1 = 0
-
-switch array.0.card.i paper
-    switch array.1.card.i rock
-        score.0 = 1
-        score.1 = 0
-    switch array.1.card.i paper
-        score.0 = 0
-        score.1 = 0
-    switch array.1.card.i scissors
-        score.0 = 0
-        score.1 = 1
-        
-switch array.0.card.i scissors
-    switch array.1.card.i rock
-        score.0 = 0
-        score.1 = 1
-    switch array.1.card.i paper
-        score.0 = 1
-        score.1 = 0
-    switch array.1.card.i scissors
-        score.0 = 0
-        score.1 = 0
-
-next i
+    //Display result
+    if(victory) {
+        alert("Vitory! " + userChoice.name + " wins!")
+    }else{
+        alert("Defeat, " + computerChoice + " wins!");
+    }
 }
 
-if score.0 = score.1
-var array.0.user.draws +1
-var array.1.user.draws +1
+*/
 
-if score.0 > score.1
-var array.0.user.wins +1
-var array.1.user.lose +1
 
-if score.0 < score.1
-var array.0.user.lose +1
-var array.1.user.wins +1
+
+/*
+
 
 db user update: key array.0.user.fighflag = 0
 db user update: key array.1.user.fighflag = 0
@@ -100,35 +87,6 @@ db score update key array.1.user {
 
 
 /*
-//Set up the choices with what they can beat
-//This is a hash table of objects you can referecne by name
-var choices  =  {rock : {name: "Rock", defeats: ["scissors","lizard"]},
-                 paper: {name: "Paper", defeats: ["rock", "spock"]},
-                 scissors: {name: "Scissors", defeats: ["paper", "lizard"]},
-                 lizard: {name: "Lizard", defeats:["paper","spock"]},
-                 spock: {name: "Spock", defeats:["scissors","rock"]}
-                };
-
-
-//Get the computers choice
-var computerChoice = Math.random();
-if (computerChoice < 0.2) {
-    computerChoice = "rock";
-} else if (computerChoice <= 0.4) {
-    computerChoice = "paper";
-} else if (computerChoice <= 0.6) {
-    computerChoice = "scissors";
-} else if (computerChoice <= 0.8) {
-    computerChoice = "lizard";
-} else {
-    computerChoice = "spock";
-}
-
-
-//Get the users choice, normalising to lower case
-var userChoice = prompt("Do you choose rock, paper, scissors, lizard, or spock?").toLowerCase();
-
-alert("The computer chose " + computerChoice);
 
 //Check for a tie
 if(computerChoice == userChoice){
