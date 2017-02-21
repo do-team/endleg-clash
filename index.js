@@ -24,9 +24,9 @@ exports.handler = function(event, context) {
     var p1LoseScore = 0;
     var p2LoseScore = 0;
 
-    for (battle = 1; battle < 5; battle++) {
+    for (battle = 1; battle < 6; battle++) {
         var card = 'card' + battle;
-        if(incoming[0].card == incoming[1].card){
+        if(incoming[0].card === incoming[1].card){
             console.log("It's a tie on round: ", battle);
             p1DrawScore++;
             p2DrawScore++;
