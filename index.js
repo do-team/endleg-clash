@@ -36,6 +36,11 @@ exports.handler = function(event, context) {
     var p1LoseScore = 0;
     var p2LoseScore = 0;
 
+    // This function will perform DynamoDB write
+    dbCall = function(params) {
+        console.log('Call DBWrite Update function with these parameters: ', params);
+    };
+
     // Main loop to cycle all cards, to find a winner
     main = function(callback) {
         for (battle = 1; battle < 6; battle++) {
@@ -90,10 +95,7 @@ exports.handler = function(event, context) {
 
     });
 
-    // This function will perform DynamoDB write
-    dbCall = function(params) {
-        console.log('Call DBWrite Update function with these parameters: ', params);
-    };
+
 
 };
 // Callback function to store data into dynamo.
