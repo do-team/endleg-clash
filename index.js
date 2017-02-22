@@ -70,19 +70,17 @@ exports.handler = function(event, context) {
     // We would like to prepare parameters for both players, based on output of MAIN function.
     main(function(dbCall) {
         for (i = 0; i <= 1; i++) {
-        console.log('Poskladej parametry pro hrace i');
-        params = i + " cislo cyklu"
-        dbCall(params);
+            console.log('Poskladej parametry pro hrace i');
+            params = i + " cislo cyklu"
+            dbCall(params);
         }
 
     });
 
 
-
-
-dbCall(function(params) {
-    console.log('Call DBWrite Update function with these parameters: ', params);
-});
+    dbCall = function(params) {
+        console.log('Call DBWrite Update function with these parameters: ', params);
+    };
 
 
 };
