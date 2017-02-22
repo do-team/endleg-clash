@@ -68,7 +68,7 @@ exports.handler = function(event, context) {
     };
 
     // We would like to prepare parameters for both players, based on output of MAIN function.
-    main(function(dbCall) {
+    main(function(params) {
         for (i = 0; i <= 1; i++) {
             console.log('Poskladej parametry pro hrace i');
             params = i + " cislo cyklu"
