@@ -78,7 +78,7 @@ exports.handler = function(event, context) {
 
         callback();
     };
-
+    module.exports.dbCall = dbCall;
     // This function will perform DynamoDB write
     dbCall = function(params) {
         console.log('Call DBWrite Update function with these parameters: ', params);
@@ -90,7 +90,6 @@ exports.handler = function(event, context) {
             console.log('Poskladej parametry pro hrace i');
             params = i + " = cislo cyklu";
             console.log(params);
-            module.exports.params = params;
             dbCall(params);
         }
 
