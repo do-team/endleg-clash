@@ -67,11 +67,16 @@ exports.handler = function(event, context) {
         callback();
     };
 
+    // This function will perform DynamoDB write
+    dbCall = function(params) {
+        console.log('Call DBWrite Update function with these parameters: ', params);
+    };
+
     // We would like to prepare parameters for both players, based on output of MAIN function.
     main(function(dbCall) {
         for (i = 0; i <= 1; i++) {
             console.log('Poskladej parametry pro hrace i');
-            params = i + " cislo cyklu";
+            params = i + " = cislo cyklu";
             console.log(params);
             dbCall(params);
         }
@@ -79,9 +84,6 @@ exports.handler = function(event, context) {
     });
 
 
-    dbCall = function(params) {
-        console.log('Call DBWrite Update function with these parameters: ', params);
-    };
 
 
 };
