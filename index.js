@@ -1,5 +1,5 @@
 var AWS = require("aws-sdk");
-module.exports.dbCall = dbCall;
+
 exports.handler = function(event, context) {
     // Parsing incoming object from SNS, result is incoming array with two users and their cards.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
@@ -79,21 +79,21 @@ exports.handler = function(event, context) {
         callback();
     };
 
-    // This function will perform DynamoDB write
-    dbCall = function(params) {
-        console.log('Call DBWrite Update function with these parameters: ', params);
-    };
-
     // We would like to prepare parameters for both players, based on output of MAIN function.
     main(function(dbCall) {
         for (i = 0; i <= 1; i++) {
             console.log('Poskladej parametry pro hrace i');
-            params = i + " = cislo cyklu";
+            var params = i + " = cislo cyklu";
             console.log(params);
             dbCall(params);
         }
 
     });
+
+    // This function will perform DynamoDB write
+    dbCall = function(params) {
+        console.log('Call DBWrite Update function with these parameters: ', params);
+    };
 
 };
 // Callback function to store data into dynamo.
