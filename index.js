@@ -20,7 +20,10 @@ exports.handler = function(event, context) {
     var p1LoseScore = 0;
     var p2LoseScore = 0;
     // Main loop to cycle all cards, to find a winner
-    for (battle = 1; battle < 6; battle++) {
+
+
+function main (callback) {
+        for (battle = 1; battle < 6; battle++) {
         card = ["card" + battle];
         console.log(incoming[0][card], incoming[1][card]);
         if(incoming[0][card] === incoming[1][card]){
@@ -43,14 +46,31 @@ exports.handler = function(event, context) {
             }
         }
     }
+    console.log('P1 Score: ', p1WinScore);
+    console.log('P2 Score: ', p2WinScore);
+
+    callback();
+};
 };
 
-/*
+main(function ({console.log('It works')}));
+
 // Callback function to store data into dynamo.
-for loop user0 user1
-updateUserParams Table = endleg-main
-                Key: user[0]
-                Update: fightflag = 0
+/*
+var updateUserParams = {
+    TableName:endleg-main,
+    Key:{
+        "user": incoming[0].user,
+    },
+    UpdateExpression: "remove info.actors[0]",
+    ConditionExpression: "fightflag > :flag",
+    ExpressionAttributeValues:{
+        ":flag":0
+    },
+    ReturnValues:"UPDATED_NEW"
+};
+
+
 
 updateScoreParams Table = endleg-score
                 Key: user
