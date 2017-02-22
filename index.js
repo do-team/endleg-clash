@@ -1,5 +1,5 @@
 var AWS = require("aws-sdk");
-
+module.exports.dbCall = dbCall;
 exports.handler = function(event, context) {
     // Parsing incoming object from SNS, result is incoming array with two users and their cards.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
@@ -78,7 +78,7 @@ exports.handler = function(event, context) {
 
         callback();
     };
-    module.exports.dbCall = dbCall;
+
     // This function will perform DynamoDB write
     dbCall = function(params) {
         console.log('Call DBWrite Update function with these parameters: ', params);
