@@ -6,12 +6,28 @@ exports.handler = function(event, context) {
 
     console.log('Player one >>> ', incoming[0].user, ' <<<   VS   Player two >>> ', incoming[1].user + ' <<< ');
     // Definitions of winning conditions
-    var combinations = {rock : {name: "rock", defeats: ["scissors","lizard"]},
-                     paper: {name: "paper", defeats: ["rock", "spock"]},
-                     scissors: {name: "scissors", defeats: ["paper", "lizard"]},
-                     lizard: {name: "lizard", defeats:["paper","spock"]},
-                     spock: {name: "spock", defeats:["scissors","rock"]}
-                    };
+    var combinations = {
+        rock: {
+            name: "rock",
+            defeats: ["scissors", "lizard"]
+        },
+        paper: {
+            name: "paper",
+            defeats: ["rock", "spock"]
+        },
+        scissors: {
+            name: "scissors",
+            defeats: ["paper", "lizard"]
+        },
+        lizard: {
+            name: "lizard",
+            defeats: ["paper", "spock"]
+        },
+        spock: {
+            name: "spock",
+            defeats: ["scissors", "rock"]
+        }
+    };
 
     var p1WinScore = 0;
     var p2WinScore = 0;
@@ -19,42 +35,57 @@ exports.handler = function(event, context) {
     var p2DrawScore = 0;
     var p1LoseScore = 0;
     var p2LoseScore = 0;
+
     // Main loop to cycle all cards, to find a winner
-
-
-function main (callback) {
+    main = function(callback) {
         for (battle = 1; battle < 6; battle++) {
-        card = ["card" + battle];
-        console.log(incoming[0][card], incoming[1][card]);
-        if(incoming[0][card] === incoming[1][card]){
-            console.log("TIE! Round: ", battle);
-            p1DrawScore++;
-            p2DrawScore++;
-        } else {
-        var leadCard = combinations[incoming[0][card]];
-        var victory = leadCard.defeats.indexOf(incoming[1][card]) > -1;
-
-            //Display result
-            if(victory) {
-                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0][card], " beats ", incoming[1][card] ,")." );
-                p1WinScore++;
-                p2LoseScore++;
+            card = ["card" + battle];
+            console.log(incoming[0][card], incoming[1][card]);
+            if (incoming[0][card] === incoming[1][card]) {
+                console.log("TIE! Round: ", battle);
+                p1DrawScore++;
+                p2DrawScore++;
             } else {
-                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1][card], " beats ", incoming[0][card] ,")." );
-                p1LoseScore++;
-                p2WinScore++;
+                var leadCard = combinations[incoming[0][card]];
+                var victory = leadCard.defeats.indexOf(incoming[1][card]) > -1;
+
+                //Display result
+                if (victory) {
+                    console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0][card], " beats ", incoming[1][card], ").");
+                    p1WinScore++;
+                    p2LoseScore++;
+                } else {
+                    console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1][card], " beats ", incoming[0][card], ").");
+                    p1LoseScore++;
+                    p2WinScore++;
+                }
             }
         }
-    }
-    console.log('P1 Score: ', p1WinScore);
-    console.log('P2 Score: ', p2WinScore);
+        console.log('P1 Score: ', p1WinScore);
+        console.log('P2 Score: ', p2WinScore);
 
-    callback();
+        callback();
+    };
+
+    // We would like to prepare parameters for both players, based on output of MAIN function.
+    main(function(dbCall) {
+        for (i = 0; i <= 1; i++) {
+        console.log('Poskladej parametry pro hrace i');
+        params = i + " cislo cyklu"
+        dbCall(params);
+        }
+
+    });
+
+
+
+
+dbCall(function(params) {
+    console.log('Call DBWrite Update function with these parameters: ', params);
+});
+
+
 };
-};
-
-main(function ({console.log('It works')}));
-
 // Callback function to store data into dynamo.
 /*
 var updateUserParams = {
