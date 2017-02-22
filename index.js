@@ -5,16 +5,10 @@ exports.handler = function(event, context) {
     //console.log('Event Records:', event.Records);
     //console.log('Event Records SNS:', event.Records[0].Sns);
     //console.log('Event Records SNS Message:', event.Records[0].Sns.Message); // This contains exactly the message we are sending by batch.
+
     var incoming = JSON.parse(event.Records[0].Sns.Message);
 
-    // REMAP incoming = { player1: { cards: [ incoming_old[0].card1, ... incoming_old[0].card5 ], user: incoming_old[0].user, ...}, player2: { ... } }
-
-
-    // THEN BELLOW THIS - incoming.player1.cards[battle]
-
-    console.log('Player one: ', incoming[0].user, 'VS Player two: ', incoming[1].user);
-    console.log(incoming[0].card1);
-    console.log(incoming[1].card1);
+    console.log('Player one >>> ', incoming[0].user, ' <<<   VS   Player two >>> ', incoming[1].user + ' <<< ');
 
     var combinations = {rock : {name: "rock", defeats: ["scissors","lizard"]},
                      paper: {name: "paper", defeats: ["rock", "spock"]},
@@ -31,24 +25,25 @@ exports.handler = function(event, context) {
     var p2LoseScore = 0;
 
     for (battle = 1; battle < 6; battle++) {
-        var card = 'card' + battle;
-        console.log(card);
-        console.log(incoming[0].card, incoming[1].card);
-        if(incoming[0].card === incoming[1].card){
-            console.log("It's a tie on round: ", battle);
+        card = ["card" + battle];
+
+
+        console.log(incoming[0][card], incoming[1][card]);
+        if(incoming[0][card] === incoming[1][card]){
+            console.log("TIE! Round: ", battle);
             p1DrawScore++;
             p2DrawScore++;
         } else {
-        var leadCard = combinations[incoming[0].card];
-        var victory = leadCard.defeats.indexOf(incoming[1].card) > -1;
+        var leadCard = combinations[incoming[0][card]];
+        var victory = leadCard.defeats.indexOf(incoming[1][card]) > -1;
 
             //Display result
             if(victory) {
-                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0].card, " beats ", incoming[1].card ,")." );
+                console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0][card], " beats ", incoming[1][card] ,")." );
                 p1WinScore++;
                 p2LoseScore++;
             }else{
-                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1].card, " beats ", incoming[0].card ,")." );
+                console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1][card], " beats ", incoming[0][card] ,")." );
                 p1LoseScore++;
                 p2WinScore++;
             }
