@@ -1,7 +1,7 @@
 var AWS = require("aws-sdk");
 
 exports.handler = function(event, context) {
-    // Parsing incoming object from SNS, result is incoming array with two users and theird cards.
+    // Parsing incoming object from SNS, result is incoming array with two users and their cards.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
 
     console.log('Player one >>> ', incoming[0].user, ' <<<   VS   Player two >>> ', incoming[1].user + ' <<< ');
@@ -42,7 +42,7 @@ exports.handler = function(event, context) {
             card = ["card" + battle];
             console.log(incoming[0][card], incoming[1][card]);
             if (incoming[0][card] === incoming[1][card]) {
-                console.log("TIE! Round: ", battle);
+                console.log("Draw! Round: ", battle);
                 p1DrawScore++;
                 p2DrawScore++;
             } else {
@@ -61,6 +61,18 @@ exports.handler = function(event, context) {
                 }
             }
         }
+        if (p1WinScore > p2WinScore) {
+        var ultimateWinnerP1 = 1;
+        var ultimateLoserP2 = 1;
+        }
+        if (p2WinScore > p1WinScore) {
+        var ultimateLoserP1 = 1;
+        var ultimateWinnerP2 = 1;
+        }
+        if (p2WinScore = p1WinScore) {
+        var ultimateDrawP1 = 1;
+        var ultimateDrawP2 = 1;
+        }
         console.log('P1 Score: ', p1WinScore);
         console.log('P2 Score: ', p2WinScore);
 
@@ -78,13 +90,11 @@ exports.handler = function(event, context) {
             console.log('Poskladej parametry pro hrace i');
             params = i + " = cislo cyklu";
             console.log(params);
+            module.exports.params = params;
             dbCall(params);
         }
 
     });
-
-
-
 
 };
 // Callback function to store data into dynamo.
