@@ -96,18 +96,10 @@ exports.handler = function(event, context) {
                 Key:{
                     "user": incoming[i].user
                 },
-                UpdateExpression: "set wins = wins + :w",
+                UpdateExpression: "set wins = wins + :w, lose = lose + :l, draw = draw +d",
                 ExpressionAttributeValues:{
-                    ":w":incoming[i].wins
-                },
-                ReturnValues:"UPDATED_NEW",
-                UpdateExpression: "set lose = lose + :l",
-                ExpressionAttributeValues:{
-                    ":l":incoming[i].lose
-                },
-                ReturnValues:"UPDATED_NEW",
-                UpdateExpression: "set draw = draw + :d",
-                ExpressionAttributeValues:{
+                    ":w":incoming[i].wins,
+                    ":l":incoming[i].lose,
                     ":d":incoming[i].draw
                 },
                 ReturnValues:"UPDATED_NEW"
