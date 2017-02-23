@@ -82,9 +82,9 @@ exports.handler = function(event, context) {
             "TableName": 'endleg-score',
             Item: {
                 "user": incoming[1].user,
-                "wins": p1WinScore,
-                "lose": p1LoseScore,
-                "draw": p1DrawScore,
+                "wins": p2WinScore,
+                "lose": p2LoseScore,
+                "draw": p2DrawScore,
                 "lastcombo": incoming[1].card1 + incoming[1].card2 + incoming[1].card3 + incoming[1].card4 + incoming[1].card5
             }
         }
