@@ -68,6 +68,7 @@ exports.handler = function(event, context) {
         }
 
         var params0 = {
+        "table" : 'endleg-score',
         "user" : incoming[0].user,
         "wins" : p1WinScore,
         "lose" : p1LoseScore,
@@ -76,6 +77,7 @@ exports.handler = function(event, context) {
         }
 
         var params1 = {
+        "table" : 'endleg-score',
         "user" : incoming[1].user,
         "wins" : p2WinScore,
         "lose" : p2LoseScore,
