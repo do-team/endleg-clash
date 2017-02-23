@@ -124,7 +124,7 @@ exports.handler = function(event, context) {
             };
 
 
-            docClient.put(paramsScore, function(err, data) {
+            docClient.update(paramsScore, function(err, data) {
                 if (err) {
                     console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
                 } else {
