@@ -91,7 +91,7 @@ exports.handler = function(event, context) {
                     ":w":incoming[i].wins,
                     ":l":incoming[i].lose,
                     ":d":incoming[i].draw,
-                    ":h":[battleHistory]
+                    ":h":["zkouska", "zkouska"]
                 },
                 ReturnValues:"UPDATED_NEW"
             };
