@@ -80,17 +80,7 @@ exports.handler = function(event, context) {
         }
 
         for (i = 0; i <= 1; i++) {
-            var params = {
-                "TableName": 'endleg-score',
-                Item: {
-                    "user": incoming[i].user,
-                    "wins": incoming[i].wins,
-                    "lose": incoming[i].lose,
-                    "draw": incoming[i].draw,
-                    "lastcombo": incoming[i].card1 + ", " + incoming[i].card2 + ", " + incoming[i].card3 + ", " + incoming[i].card4 + ", " + incoming[i].card5
-                }
-            }
-            var scoreHistory = incoming[0].user, " sent ", incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
+            var battleHistory = incoming[0].user + " sent " + incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
             var paramsScore = {
                 TableName:'endleg-score',
                 Key:{
@@ -101,7 +91,7 @@ exports.handler = function(event, context) {
                     ":w":incoming[i].wins,
                     ":l":incoming[i].lose,
                     ":d":incoming[i].draw,
-                    ":h":scoreHistory
+                    ":h": createSet([ battleHistory ])
                 },
                 ReturnValues:"UPDATED_NEW"
             };
@@ -118,7 +108,6 @@ exports.handler = function(event, context) {
                 ReturnValues:"UPDATED_NEW"
             };
 
-
             docClient.update(paramsScore, function(err, data) {
                 if (err) {
                     console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
@@ -128,14 +117,13 @@ exports.handler = function(event, context) {
             });
 
             docClient.update(paramsMain, function(err, data) {
-                            if (err) {
-                                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-                            } else {
-                                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-                            }
-                        });
+                if (err) {
+                    console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                } else {
+                    console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                }
+            });
         }
-
     }
 
     main();
