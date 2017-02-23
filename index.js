@@ -34,12 +34,11 @@ exports.handler = function(event, context) {
         }
     };
 
-    var p1WinScore = 0;
-    var p2WinScore = 0;
-    var p1DrawScore = 0;
-    var p2DrawScore = 0;
-    var p1LoseScore = 0;
-    var p2LoseScore = 0;
+    for (i = 0; i < 2; i++) {
+        incoming[i].winScore = 0;
+        incoming[i].loseScore = 0;
+        incoming[i].drawScore = 0;
+    }
 
     // Main loop to cycle all cards, to find a winner and to prepare parameters for DB Update.
     main = function(callback) {
@@ -48,71 +47,69 @@ exports.handler = function(event, context) {
             console.log(incoming[0][card], incoming[1][card]);
             if (incoming[0][card] === incoming[1][card]) {
                 console.log("Draw! Round: ", battle);
-                p1DrawScore++;
-                p2DrawScore++;
+                incoming[0].drawScore++;
+                incoming[1].drawScore++;
             } else {
                 var leadCard = combinations[incoming[0][card]];
                 var victory = leadCard.defeats.indexOf(incoming[1][card]) > -1;
-
                 //Display result
                 if (victory) {
                     console.log("Player ", incoming[0].user, " defeats ", incoming[1].user, " (", incoming[0][card], " beats ", incoming[1][card], ").");
-                    p1WinScore++;
-                    p2LoseScore++;
+                    incoming[0].winScore++;
+                    incoming[1].loseScore++;
                 } else {
                     console.log("Player ", incoming[1].user, " defeats ", incoming[0].user, " (", incoming[1][card], " beats ", incoming[0][card], ").");
-                    p1LoseScore++;
-                    p2WinScore++;
+                    incoming[0].loseScore++;
+                    incoming[1].winScore++;
                 }
             }
         }
-
-        var params0 = {
-            "TableName": 'endleg-score',
-            Item: {
-                "user": incoming[0].user,
-                "wins": p1WinScore,
-                "lose": p1LoseScore,
-                "draw": p1DrawScore,
-                "lastcombo": incoming[0].card1 + incoming[0].card2 + incoming[0].card3 + incoming[0].card4 + incoming[0].card5
-            }
+        // Evaluation of who is real overall winner (could be shortened).
+        if (incoming[0].winScore > incoming[1].winScore) {
+            incoming[0].wins = 1;
+            incoming[0].lose = 0;
+            incoming[0].draw = 0;
+            incoming[1].wins = 0;
+            incoming[1].lose = 1;
+            incoming[1].draw = 0;
+        } else if (incoming[0].winScore < incoming[1].winScore) {
+            incoming[1].wins = 1;
+            incoming[1].lose = 0;
+            incoming[1].draw = 0;
+            incoming[0].wins = 0;
+            incoming[0].lose = 1;
+            incoming[0].draw = 0;
+        } else {
+            incoming[1].wins = 0;
+            incoming[1].lose = 0;
+            incoming[1].draw = 1;
+            incoming[0].wins = 0;
+            incoming[0].lose = 0;
+            incoming[0].draw = 1;
         }
 
-        var params1 = {
-            "TableName": 'endleg-score',
-            Item: {
-                "user": incoming[1].user,
-                "wins": p2WinScore,
-                "lose": p2LoseScore,
-                "draw": p2DrawScore,
-                "lastcombo": incoming[1].card1 + incoming[1].card2 + incoming[1].card3 + incoming[1].card4 + incoming[1].card5
+        for (i = 0; i <= 1; i++) {
+            var params = {
+                "TableName": 'endleg-score',
+                Item: {
+                    "user": incoming[i].user,
+                    "wins": incoming[i].wins,
+                    "lose": incoming[i].lose,
+                    "draw": incoming[i].draw,
+                    "lastcombo": incoming[i].card1 + ", " + incoming[i].card2 + ", " + incoming[i].card3 + ", " + incoming[i].card4 + ", " + incoming[i].card5
+                }
             }
+
+            docClient.put(params, function(err, data) {
+                if (err) {
+                    console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                } else {
+                    console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                }
+            });
         }
 
-        docClient.put(params0, function(err, data) {
-            if (err) {
-                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-            } else {
-                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-            }
-        });
-        docClient.put(params1, function(err, data) {
-            if (err) {
-                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-            } else {
-                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-            }
-        });
     }
 
-    /*    main = function() {
-            for (i = 0; i <= 1; i++) {
-                console.log('Prepare parameters to be written for player i');
-                var params = i + " = something";
-                console.log(params);
-                dbCall(params);
-            }
-       }
-    */
     main();
 };
