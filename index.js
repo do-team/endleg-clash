@@ -1,9 +1,14 @@
 var AWS = require("aws-sdk");
 
 exports.handler = function(event, context) {
+    // Update of AWS config to reach DynamoDB
+    AWS.config.update({
+      region: "eu-central-1",
+      endpoint: "dynamodb.eu-central-1.amazonaws.com"
+    });
+    var docClient = new AWS.DynamoDB.DocumentClient();
     // Parsing incoming object from SNS, result is incoming array with two users and their cards.
     var incoming = JSON.parse(event.Records[0].Sns.Message);
-
     console.log('Player one >>> ', incoming[0].user, ' <<<   VS   Player two >>> ', incoming[1].user + ' <<< ');
     // Definitions of winning conditions
     var combinations = {
@@ -29,19 +34,16 @@ exports.handler = function(event, context) {
         }
     };
 
-    var p1WinScore = 0;
-    var p2WinScore = 0;
-    var p1DrawScore = 0;
-    var p2DrawScore = 0;
-    var p1LoseScore = 0;
-    var p2LoseScore = 0;
+    // Call DBWrite Update function with these parameters
+    dbCall = function docClient.update(params, function(err, data) {
+        if (err) {
+            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+        }
+    });
 
-    // This function will perform DynamoDB write
-    dbCall = function(params) {
-        console.log('Call DBWrite Update function with these parameters: ', params);
-    };
-
-    // Main loop to cycle all cards, to find a winner
+    // Main loop to cycle all cards, to find a winner and to prepare parameters for DB Update.
     main = function(callback) {
         for (battle = 1; battle < 6; battle++) {
             card = ["card" + battle];
@@ -66,84 +68,17 @@ exports.handler = function(event, context) {
                 }
             }
         }
-        if (p1WinScore > p2WinScore) {
-        var ultimateWinnerP1 = 1;
-        var ultimateLoserP2 = 1;
-        }
-        if (p2WinScore > p1WinScore) {
-        var ultimateLoserP1 = 1;
-        var ultimateWinnerP2 = 1;
-        }
-        if (p2WinScore = p1WinScore) {
-        var ultimateDrawP1 = 1;
-        var ultimateDrawP2 = 1;
-        }
-        console.log('P1 Score: ', p1WinScore);
-        console.log('P2 Score: ', p2WinScore);
+        dbCall(params);
+    }
 
-        callback();
-    };
-
-    // We would like to prepare parameters for both players, based on output of MAIN function.
-    main(function(dbCall) {
+/*    main = function() {
         for (i = 0; i <= 1; i++) {
-            console.log('Poskladej parametry pro hrace i');
-            var params = i + " = cislo cyklu";
+            console.log('Prepare parameters to be written for player i');
+            var params = i + " = something";
             console.log(params);
             dbCall(params);
         }
-
-    });
-
-
-
-};
-// Callback function to store data into dynamo.
-/*
-var updateUserParams = {
-    TableName:endleg-main,
-    Key:{
-        "user": incoming[0].user,
-    },
-    UpdateExpression: "remove info.actors[0]",
-    ConditionExpression: "fightflag > :flag",
-    ExpressionAttributeValues:{
-        ":flag":0
-    },
-    ReturnValues:"UPDATED_NEW"
-};
-
-
-
-updateScoreParams Table = endleg-score
-                Key: user
-                Update: Wins
-                        Draws
-                        Lose
-                        History = []
-                        LastCombination
-
-var params = {
-    TableName:table,
-    Key:{
-        "year": year,
-        "title": title
-    },
-    UpdateExpression: "remove info.actors[0]",
-    ConditionExpression: "size(info.actors) > :num",
-    ExpressionAttributeValues:{
-        ":num":3
-    },
-    ReturnValues:"UPDATED_NEW"
-};
-
-console.log("Attempting a conditional update...");
-docClient.update(params, function(err, data) {
-    if (err) {
-        console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-    } else {
-        console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-    }
-});
-
+   }
 */
+    main();
+};
