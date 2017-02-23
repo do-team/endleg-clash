@@ -80,7 +80,7 @@ exports.handler = function(event, context) {
         }
 
         for (i = 0; i <= 1; i++) {
-            var paramsScore = {
+            var params = {
                 "TableName": 'endleg-score',
                 Item: {
                     "user": incoming[i].user,
@@ -90,6 +90,26 @@ exports.handler = function(event, context) {
                     "lastcombo": incoming[i].card1 + ", " + incoming[i].card2 + ", " + incoming[i].card3 + ", " + incoming[i].card4 + ", " + incoming[i].card5
                 }
             }
+
+            var paramsScore = {
+                TableName:'endleg-score',
+                Key:{
+                    "user": incoming[i].user
+                },
+                UpdateExpression: "set wins = wins + :val",
+                ExpressionAttributeValues:{
+                    ":val":incoming[i].wins
+                },
+                UpdateExpression: "set lose = lose + :val",
+                ExpressionAttributeValues:{
+                    ":val":incoming[i].lose
+                },
+                UpdateExpression: "set draw = draw + :val",
+                ExpressionAttributeValues:{
+                    ":val":incoming[i].draw
+                },
+                ReturnValues:"UPDATED_NEW"
+            };
 
             var paramsMain = {
                 TableName: 'endleg-main',
