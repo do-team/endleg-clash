@@ -100,7 +100,7 @@ exports.handler = function(event, context) {
                 ExpressionAttributeValues:{
                     ":flag":0
                 },
-                ReturnValues:"Updated FightFlag!"
+                ReturnValues:"UPDATED_NEW"
             };
 
 
