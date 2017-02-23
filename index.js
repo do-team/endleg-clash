@@ -80,7 +80,7 @@ exports.handler = function(event, context) {
         }
 
         for (i = 0; i <= 1; i++) {
-            var params = {
+            var paramsScore = {
                 "TableName": 'endleg-score',
                 Item: {
                     "user": incoming[i].user,
@@ -91,13 +91,34 @@ exports.handler = function(event, context) {
                 }
             }
 
-            docClient.put(params, function(err, data) {
+            var paramsMain = {
+                TableName: 'endleg-main',
+                Key:{
+                    "user": incoming[i].user
+                },
+                UpdateExpression: "set fightflag = :flag",
+                ExpressionAttributeValues:{
+                    ":flag":0
+                },
+                ReturnValues:"Updated FightFlag!"
+            };
+
+
+            docClient.put(paramsScore, function(err, data) {
                 if (err) {
                     console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
                 } else {
                     console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
                 }
             });
+
+            docClient.update(paramsMain, function(err, data) {
+                            if (err) {
+                                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                            } else {
+                                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                            }
+                        });
         }
 
     }
