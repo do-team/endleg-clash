@@ -38,6 +38,9 @@ exports.handler = function(event, context) {
         incoming[i].winScore = 0;
         incoming[i].loseScore = 0;
         incoming[i].drawScore = 0;
+        incoming[i].wins = 0;
+        incoming[i].lose = 0;
+        incoming[i].draw = 0;
     }
 
     // Main loop to cycle all cards, to find a winner and to prepare parameters for DB Update.
@@ -67,24 +70,12 @@ exports.handler = function(event, context) {
         // Evaluation of who is real overall winner (could be shortened).
         if (incoming[0].winScore > incoming[1].winScore) {
             incoming[0].wins = 1;
-            incoming[0].lose = 0;
-            incoming[0].draw = 0;
-            incoming[1].wins = 0;
             incoming[1].lose = 1;
-            incoming[1].draw = 0;
         } else if (incoming[0].winScore < incoming[1].winScore) {
             incoming[1].wins = 1;
-            incoming[1].lose = 0;
-            incoming[1].draw = 0;
-            incoming[0].wins = 0;
             incoming[0].lose = 1;
-            incoming[0].draw = 0;
         } else {
-            incoming[1].wins = 0;
-            incoming[1].lose = 0;
             incoming[1].draw = 1;
-            incoming[0].wins = 0;
-            incoming[0].lose = 0;
             incoming[0].draw = 1;
         }
 
