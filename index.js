@@ -3,8 +3,8 @@ var AWS = require("aws-sdk");
 exports.handler = function(event, context) {
     // Update of AWS config to reach DynamoDB
     AWS.config.update({
-      region: "eu-central-1",
-      endpoint: "dynamodb.eu-central-1.amazonaws.com"
+        region: "eu-central-1",
+        endpoint: "dynamodb.eu-central-1.amazonaws.com"
     });
     var docClient = new AWS.DynamoDB.DocumentClient();
     // Parsing incoming object from SNS, result is incoming array with two users and their cards.
@@ -34,12 +34,12 @@ exports.handler = function(event, context) {
         }
     };
 
-        var p1WinScore = 0;
-        var p2WinScore = 0;
-        var p1DrawScore = 0;
-        var p2DrawScore = 0;
-        var p1LoseScore = 0;
-        var p2LoseScore = 0;
+    var p1WinScore = 0;
+    var p2WinScore = 0;
+    var p1DrawScore = 0;
+    var p2DrawScore = 0;
+    var p1LoseScore = 0;
+    var p2LoseScore = 0;
 
     // Main loop to cycle all cards, to find a winner and to prepare parameters for DB Update.
     main = function(callback) {
@@ -68,47 +68,51 @@ exports.handler = function(event, context) {
         }
 
         var params0 = {
-        "TableName" : 'endleg-score',
-        "Key" : incoming[0].user,
-        "wins" : p1WinScore,
-        "lose" : p1LoseScore,
-        "draw" : p1DrawScore,
-        "lastcombo" : incoming[0].card1 + incoming[0].card2 + incoming[0].card3 + incoming[0].card4 + incoming[0].card5,
+            "TableName": 'endleg-score',
+            Item: {
+                "user": incoming[0].user,
+                "wins": p1WinScore,
+                "lose": p1LoseScore,
+                "draw": p1DrawScore,
+                "lastcombo": incoming[0].card1 + incoming[0].card2 + incoming[0].card3 + incoming[0].card4 + incoming[0].card5
+            }
         }
 
         var params1 = {
-        "TableName" : 'endleg-score',
-        "Key" : incoming[1].user,
-        "wins" : p2WinScore,
-        "lose" : p2LoseScore,
-        "draw" : p2DrawScore,
-        "lastcombo" : incoming[1].card1 + incoming[1].card2 + incoming[1].card3 + incoming[1].card4 + incoming[1].card5,
+            "TableName": 'endleg-score',
+            Item: {
+                "user": incoming[1].user,
+                "wins": p1WinScore,
+                "lose": p1LoseScore,
+                "draw": p1DrawScore,
+                "lastcombo": incoming[1].card1 + incoming[1].card2 + incoming[1].card3 + incoming[1].card4 + incoming[1].card5
+            }
         }
 
-        docClient.update(JSON.stringify(params0, null, 2), function(err, data) {
-                if (err) {
-                    console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-                } else {
-                    console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-                }
-            });
-        docClient.update(JSON.stringify(params1, null, 2), function(err, data) {
-                if (err) {
-                    console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-                } else {
-                    console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-                }
-            });
+        docClient.put(params0, function(err, data) {
+            if (err) {
+                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+            } else {
+                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+            }
+        });
+        docClient.put(params1, function(err, data) {
+            if (err) {
+                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+            } else {
+                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+            }
+        });
     }
 
-/*    main = function() {
-        for (i = 0; i <= 1; i++) {
-            console.log('Prepare parameters to be written for player i');
-            var params = i + " = something";
-            console.log(params);
-            dbCall(params);
-        }
-   }
-*/
+    /*    main = function() {
+            for (i = 0; i <= 1; i++) {
+                console.log('Prepare parameters to be written for player i');
+                var params = i + " = something";
+                console.log(params);
+                dbCall(params);
+            }
+       }
+    */
     main();
 };
