@@ -34,6 +34,13 @@ exports.handler = function(event, context) {
         }
     };
 
+        var p1WinScore = 0;
+        var p2WinScore = 0;
+        var p1DrawScore = 0;
+        var p2DrawScore = 0;
+        var p1LoseScore = 0;
+        var p2LoseScore = 0;
+
     // Main loop to cycle all cards, to find a winner and to prepare parameters for DB Update.
     main = function(callback) {
         for (battle = 1; battle < 6; battle++) {
@@ -75,14 +82,15 @@ exports.handler = function(event, context) {
         "draw" : p2DrawScore,
         "lastcombo" : incoming[1].card1 + incoming[1].card2 + incoming[1].card3 + incoming[1].card4 + incoming[1].card5,
         }
-        docClient.update(params0, function(err, data) {
+
+        docClient.update(JSON.stringify(params0, null, 2), function(err, data) {
                 if (err) {
                     console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
                 } else {
                     console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
                 }
             });
-        docClient.update(params1, function(err, data) {
+        docClient.update(JSON.stringify(params1, null, 2), function(err, data) {
                 if (err) {
                     console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
                 } else {
