@@ -100,10 +100,12 @@ exports.handler = function(event, context) {
                 ExpressionAttributeValues:{
                     ":w":incoming[i].wins
                 },
+                ReturnValues:"UPDATED_NEW",
                 UpdateExpression: "set lose = lose + :l",
                 ExpressionAttributeValues:{
                     ":l":incoming[i].lose
                 },
+                ReturnValues:"UPDATED_NEW",
                 UpdateExpression: "set draw = draw + :d",
                 ExpressionAttributeValues:{
                     ":d":incoming[i].draw
