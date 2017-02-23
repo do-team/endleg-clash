@@ -90,7 +90,7 @@ exports.handler = function(event, context) {
                     "lastcombo": incoming[i].card1 + ", " + incoming[i].card2 + ", " + incoming[i].card3 + ", " + incoming[i].card4 + ", " + incoming[i].card5
                 }
             }
-
+            var scoreHistory = incoming[0].user, " sent ", incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
             var paramsScore = {
                 TableName:'endleg-score',
                 Key:{
@@ -101,7 +101,7 @@ exports.handler = function(event, context) {
                     ":w":incoming[i].wins,
                     ":l":incoming[i].lose,
                     ":d":incoming[i].draw,
-                    ":h":incoming[i].card1 + ", " + incoming[i].card2 + ", " + incoming[i].card3 + ", " + incoming[i].card4 + ", " + incoming[i].card5
+                    ":h":scoreHistory
                 },
                 ReturnValues:"UPDATED_NEW"
             };
