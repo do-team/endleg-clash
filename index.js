@@ -34,16 +34,6 @@ exports.handler = function(event, context) {
         }
     };
 
-    // Call DBWrite Update function with these parameters
-    docClient.update(params, function(err, data) {
-        if (err) {
-            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-        } else {
-            console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-        }
-    });
-    var params0 = [];
-    var params1 = [];
     // Main loop to cycle all cards, to find a winner and to prepare parameters for DB Update.
     main = function(callback) {
         for (battle = 1; battle < 6; battle++) {
