@@ -87,12 +87,12 @@ exports.handler = function(event, context) {
                     "user": incoming[i].user
                 },
                 //UpdateExpression: "set wins = wins + :w, lose = lose + :l, draw = draw + :d, history = history + :h",
-                UpdateExpression: "set wins = wins + :w, lose = lose + :l, draw = draw + :d add history :h",
+                UpdateExpression: "SET wins = wins + :w, lose = lose + :l, draw = draw + :d ADD history :h",
                 ExpressionAttributeValues:{
                     ":w":incoming[i].wins,
                     ":l":incoming[i].lose,
                     ":d":incoming[i].draw,
-                    ":h":[battleHistory]
+                    ":h":set([battleHistory])
                 },
                 ReturnValues:"UPDATED_NEW"
             };
