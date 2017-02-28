@@ -97,7 +97,7 @@ exports.handler = function(event, context) {
                     ":d":incoming[i].draw,
                     ":h":docClient.createSet([battleHistory])
                 },
-                ReturnValues:"UPDATED_NEW"
+                ReturnValues:"NONE"
             };
 
             var paramsMain = {
