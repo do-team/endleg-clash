@@ -92,7 +92,7 @@ exports.handler = function(event, context) {
                     ":w":incoming[i].wins,
                     ":l":incoming[i].lose,
                     ":d":incoming[i].draw,
-                    ":h":set([battleHistory])
+                    ":h":docClient.createSet([battleHistory])
                 },
                 ReturnValues:"UPDATED_NEW"
             };
