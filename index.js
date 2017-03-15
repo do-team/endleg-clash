@@ -80,7 +80,31 @@ exports.handler = function(event, context) {
         }
 
         for (i = 0; i <= 1; i++) {
-            var battleHistory = incoming[0].user + " sent " + incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
+            var battleHistory = {
+                                  "Player 1": [
+                                    {
+                                      "name": incoming[0].user,
+                                      "card1": incoming[0].card1,
+                                      "card2": incoming[0].card2,
+                                      "card3": incoming[0].card3,
+                                      "card4": incoming[0].card4,
+                                      "card5": incoming[0].card5
+                                    }
+                                  ],
+                                  "Player 2": [
+                                    {
+                                      "name": incoming[1].user,
+                                      "card1": incoming[1].card1,
+                                      "card2": incoming[1].card2,
+                                      "card3": incoming[1].card3,
+                                      "card4": incoming[1].card4,
+                                      "card5": incoming[1].card5
+                                    }
+                                  ]
+                                 }
+
+             // incoming[0].user + " sent " + incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
+
             var paramsScore = {
                 TableName:'endleg-score',
                 Key:{
