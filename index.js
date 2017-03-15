@@ -1,5 +1,5 @@
 var AWS = require("aws-sdk");
-
+// test
 exports.handler = function(event, context) {
     // Update of AWS config to reach DynamoDB
     AWS.config.update({
