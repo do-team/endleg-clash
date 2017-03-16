@@ -84,7 +84,7 @@ exports.handler = function(event, context) {
 
 
         for (i = 0; i <= 1; i++) {
-            var battleHistory = {
+            var battleHistory =    {
                                   "Player 1": [
                                     {
                                       "name": incoming[0].user,
@@ -105,8 +105,11 @@ exports.handler = function(event, context) {
                                       "card5": incoming[1].card5
                                     }
                                   ]
-                                 }
+                                 };
 
+
+                console.log(battleHistory);
+                console.log(JSON.stringify(battleHistory));
              // incoming[0].user + " sent " + incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
 
             var paramsScore = {
@@ -114,12 +117,12 @@ exports.handler = function(event, context) {
                 Key:{
                     "user": incoming[i].user
                 },
-                UpdateExpression: "SET wins = wins + :w, lose = lose + :l, draw = draw + :d ADD history :h",
+                UpdateExpression: "SET wins = wins + :w, lose = lose + :l, draw = draw + :d, history = :h",
                 ExpressionAttributeValues:{
                     ":w":incoming[i].wins,
                     ":l":incoming[i].lose,
                     ":d":incoming[i].draw,
-                    ":h":docClient.createSet([battleHistory])
+                    ":h":battleHistory
                 },
                 ReturnValues:"NONE"
             };
