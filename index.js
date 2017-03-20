@@ -85,7 +85,7 @@ exports.handler = function(event, context) {
 
         for (i = 0; i <= 1; i++) {
             var battleHistory =    {
-                                  "Player 1": [
+                                  "Player 1":
                                     {
                                       "name": incoming[0].user,
                                       "card1": incoming[0].card1,
@@ -94,8 +94,8 @@ exports.handler = function(event, context) {
                                       "card4": incoming[0].card4,
                                       "card5": incoming[0].card5
                                     }
-                                  ],
-                                  "Player 2": [
+                                  ,
+                                  "Player 2":
                                     {
                                       "name": incoming[1].user,
                                       "card1": incoming[1].card1,
@@ -104,7 +104,7 @@ exports.handler = function(event, context) {
                                       "card4": incoming[1].card4,
                                       "card5": incoming[1].card5
                                     }
-                                  ]
+
                                  };
 
 
