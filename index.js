@@ -77,6 +77,8 @@ exports.handler = function(event, context) {
             incoming[0].lose = 1;
         }
         if (incoming[0].winScore === incoming[1].winScore){
+            console.log('P1 score:', incoming[0].winScore);
+            console.log('P2 score:', incoming[1].winScore);
             incoming[1].draw = 1;
             incoming[0].draw = 1;
         }
