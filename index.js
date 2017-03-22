@@ -71,10 +71,12 @@ exports.handler = function(event, context) {
         if (incoming[0].winScore > incoming[1].winScore) {
             incoming[0].wins = 1;
             incoming[1].lose = 1;
-        } else if (incoming[0].winScore < incoming[1].winScore) {
+        }
+        if (incoming[0].winScore < incoming[1].winScore) {
             incoming[1].wins = 1;
             incoming[0].lose = 1;
-        } else if (incoming[0].winScore === incoming[1].winScore){
+        }
+        if (incoming[0].winScore === incoming[1].winScore){
             incoming[1].draw = 1;
             incoming[0].draw = 1;
         }
@@ -105,7 +107,6 @@ exports.handler = function(event, context) {
                                       "card4": incoming[1].card4,
                                       "card5": incoming[1].card5
                                     }
-
                                  };
 
 
