@@ -127,6 +127,8 @@ exports.handler = function(event, context) {
                 ReturnValues:"NONE"
             };
 
+            console.log(paramsScore);
+
             var paramsMain = {
                 TableName: 'endleg-main',
                 Key:{
