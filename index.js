@@ -74,7 +74,7 @@ exports.handler = function(event, context) {
         } else if (incoming[0].winScore < incoming[1].winScore) {
             incoming[1].wins = 1;
             incoming[0].lose = 1;
-        } else {
+        } else if (incoming[0].winScore === incoming[1].winScore){
             incoming[1].draw = 1;
             incoming[0].draw = 1;
         }
@@ -82,6 +82,7 @@ exports.handler = function(event, context) {
         if (incoming[0].wins = 1) { winMessage = "Winner is: " + incoming[0].user};
         if (incoming[1].wins = 1) { winMessage = "Winner is: " + incoming[1].user};
 
+        console.log(winMessage);
 
         for (i = 0; i <= 1; i++) {
             var battleHistory =    {
@@ -108,8 +109,8 @@ exports.handler = function(event, context) {
                                  };
 
 
-                console.log(battleHistory);
-                console.log(JSON.stringify(battleHistory));
+                // console.log(battleHistory);
+                // console.log(JSON.stringify(battleHistory));
              // incoming[0].user + " sent " + incoming[0].card1 + ", " + incoming[0].card2 + ", " + incoming[0].card3 + ", " + incoming[0].card4 + ", " + incoming[0].card5 + " while his opponent " + incoming[1].user + " sent " + incoming[1].card1 + ", " + incoming[1].card2 + ", " + incoming[1].card3 + ", " + incoming[1].card4 + ", " + incoming[1].card5 + ".";
 
             var paramsScore = {
